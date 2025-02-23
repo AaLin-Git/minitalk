@@ -6,18 +6,18 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/23 19:52:28 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/23 20:09:51 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
 
-volatile sig_atomic_t	received = 0;
+volatile sig_atomic_t	g_received = 0;
 
-void acknowledge_sig(int signum)
+void	acknowledge_sig(int signum)
 {
 	(void)signum;
-	received = 1;
+	g_received = 1;
 }
 
 void	sig_killer(pid_t pid, unsigned char c)
@@ -27,22 +27,32 @@ void	sig_killer(pid_t pid, unsigned char c)
 	i = 0;
 	while (i < 8)
 	{
-		received = 0;
+		g_received = 0;
 		if (c & (1 << i))
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		while (!received)
+		while (!g_received)
 			usleep(100);
 		i++;
 	}
 }
 
+void	initialize_sigaction(void)
+{
+	struct sigaction	sa;
+
+	sa = (struct sigaction){0};
+	sa.sa_handler = acknowledge_sig;
+	sa.sa_flags = SA_RESTART;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+}
+
 int	main(int argc, char *argv[])
 {
-	pid_t	pid;
-	char	*str;
-	struct sigaction sa;
+	pid_t				pid;
+	char				*str;
 
 	if (argc != 3)
 	{
@@ -56,11 +66,7 @@ int	main(int argc, char *argv[])
 		ft_printf("PID is wrong");
 		return (1);
 	}
-	sa = (struct sigaction){0};
-	sa.sa_handler = acknowledge_sig;
-	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGUSR1, &sa, NULL);
+	initialize_sigaction();
 	while (*str)
 	{
 		sig_killer(pid, (unsigned char)*str);
