@@ -5,41 +5,63 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 16:23:25 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/24 10:10:12 by akovalch         ###   ########.fr       */
+/*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
+/*   Updated: 2025/02/24 11:12:39 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
 #include "../includes/errors.h"
 
-void	sig_killer(pid_t pid, char c)
+volatile sig_atomic_t	g_received = 0;
+
+void	acknowledge_sig(int signum)
+{
+	(void)signum;
+	g_received = 1;
+}
+
+void	sig_killer(pid_t pid, unsigned char c)
 {
 	int	i;
 
 	i = 0;
 	while (i < 8)
 	{
+		g_received = 0;
 		if (c & (1 << i))
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(100);
+		while (!g_received)
+			usleep(50);
 		i++;
 	}
 }
 
+void	initialize_sigaction(void)
+{
+	struct sigaction	sa;
+
+	sa = (struct sigaction){0};
+	sa.sa_handler = acknowledge_sig;
+	sa.sa_flags = SA_RESTART;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+}
+
 int	main(int argc, char *argv[])
 {
-	pid_t	pid;
-	char	*str;
+	pid_t				pid;
+	char				*str;
 
 	if (argc != 3)
 		return (ft_printf(ERR_ARG), 1);
 	pid = ft_atoi(argv[1]);
+	str = argv[2];
 	if (pid <= 0)
 		return (ft_printf(ERR_PID), 1);
-	str = argv[2];
+	initialize_sigaction();
 	while (*str)
 	{
 		sig_killer(pid, (unsigned char)*str);
