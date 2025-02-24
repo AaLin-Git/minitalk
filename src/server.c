@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:46 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/24 11:14:04 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:39:17 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ void	sighandler(int signum, siginfo_t *info, void *context)
 
 	(void)context;
 	if (signum == SIGUSR1)
-		c |= 1 << i;
+		c = (c << 1);
+	else if (signum == SIGUSR2)
+		c = (c << 1) | 1;
 	i++;
 	if (i == 8)
 	{

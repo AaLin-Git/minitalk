@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/24 11:12:39 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:40:53 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,17 @@ void	sig_killer(pid_t pid, unsigned char c)
 {
 	int	i;
 
-	i = 0;
-	while (i < 8)
+	i = 7;
+	while (i >= 0)
 	{
 		g_received = 0;
-		if (c & (1 << i))
-			kill(pid, SIGUSR1);
-		else
+		if ((c >> i) & 1)
 			kill(pid, SIGUSR2);
+		else
+			kill(pid, SIGUSR1);
 		while (!g_received)
 			usleep(50);
-		i++;
+		i--;
 	}
 }
 
@@ -48,6 +48,7 @@ void	initialize_sigaction(void)
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 }
 
 int	main(int argc, char *argv[])
