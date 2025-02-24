@@ -6,11 +6,12 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:23:25 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/22 20:08:08 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:10:12 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
+#include "../includes/errors.h"
 
 void	sig_killer(pid_t pid, char c)
 {
@@ -34,16 +35,10 @@ int	main(int argc, char *argv[])
 	char	*str;
 
 	if (argc != 3)
-	{
-		ft_printf("Use only 3 arguments...\n");
-		return (1);
-	}
+		return (ft_printf(ERR_ARG), 1);
 	pid = ft_atoi(argv[1]);
 	if (pid <= 0)
-	{
-		ft_printf("PID is wrong");
-		return (1);
-	}
+		return (ft_printf(ERR_PID), 1);
 	str = argv[2];
 	while (*str)
 	{

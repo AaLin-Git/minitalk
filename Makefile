@@ -24,7 +24,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 $(NAME): $(SERVER) $(CLIENT)
 
-all: $(NAME) bonus
+all: $(NAME)
 
 $(SERVER): $(OBJS_SERVER) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJS_SERVER) $(LIBFT) -o $(SERVER)
@@ -56,4 +56,6 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+bonus_re: fclean bonus
+
+.PHONY: all clean fclean re bonus_re

@@ -6,11 +6,12 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/23 20:09:51 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:19:16 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
+#include "../includes/errors.h"
 
 volatile sig_atomic_t	g_received = 0;
 
@@ -55,17 +56,11 @@ int	main(int argc, char *argv[])
 	char				*str;
 
 	if (argc != 3)
-	{
-		ft_printf("Use only 3 arguments...\n");
-		return (1);
-	}
+		return (ft_printf(ERR_ARG), 1);
 	pid = ft_atoi(argv[1]);
 	str = argv[2];
 	if (pid <= 0)
-	{
-		ft_printf("PID is wrong");
-		return (1);
-	}
+		return (ft_printf(ERR_PID), 1);
 	initialize_sigaction();
 	while (*str)
 	{
@@ -73,6 +68,5 @@ int	main(int argc, char *argv[])
 		str++;
 	}
 	sig_killer (pid, '\0');
-	pause();
 	return (0);
 }

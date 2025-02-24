@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:46 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/23 20:04:18 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:22:08 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int	main(void)
 {
 	struct sigaction	sa;
 
-	sa = (struct sigaction){0};
-	sa.sa_flags = SA_SIGINFO | SA_RESTART;
-	sa.sa_sigaction = sighandler;
 	ft_printf("PID: %d\n", getpid());
+	sa = (struct sigaction){0};
+	sa.sa_sigaction = sighandler;
+	sa.sa_flags = SA_SIGINFO | SA_RESTART;
 	sigaction (SIGUSR1, &sa, NULL);
 	sigaction (SIGUSR2, &sa, NULL);
 	while (1)
