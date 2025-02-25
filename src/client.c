@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/24 11:40:53 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:44:55 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ void	initialize_sigaction(void)
 
 	sa = (struct sigaction){0};
 	sa.sa_handler = acknowledge_sig;
-	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 }

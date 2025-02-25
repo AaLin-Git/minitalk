@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:46 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/24 11:39:17 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:45:00 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	sighandler(int signum, siginfo_t *info, void *context)
 		i = 0;
 		c = 0;
 	}
-	//usleep(100);
 	kill(info->si_pid, SIGUSR1);
 }
 
@@ -43,7 +42,7 @@ int	main(void)
 	ft_printf("PID: %d\n", getpid());
 	sa = (struct sigaction){0};
 	sa.sa_sigaction = sighandler;
-	sa.sa_flags = SA_SIGINFO | SA_RESTART;
+	sa.sa_flags = SA_SIGINFO;
 	sigaction (SIGUSR1, &sa, NULL);
 	sigaction (SIGUSR2, &sa, NULL);
 	while (1)
