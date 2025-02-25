@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/25 14:39:40 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:40:45 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	main(int argc, char *argv[])
 	str = argv[2];
 	if (pid <= 0)
 		return (ft_printf(ERR_PID), 1);
-	
 	initialize_sigaction();
 	while (*str)
 	{

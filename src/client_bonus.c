@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/25 14:39:27 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:42:09 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	initialize_sigaction(void)
 	sigaction(SIGUSR2, &sa, NULL);
 }
 
-void sighandler_kill(int signum)
+void	sighandler_kill(int signum)
 {
 	(void)signum;
 	exit(0);
@@ -60,6 +60,7 @@ int	main(int argc, char *argv[])
 {
 	pid_t				pid;
 	char				*str;
+	struct sigaction	sa1;
 
 	if (argc != 3)
 		return (ft_printf(ERR_ARG), 1);
@@ -68,12 +69,9 @@ int	main(int argc, char *argv[])
 	str = argv[2];
 	if (pid <= 0)
 		return (ft_printf(ERR_PID), 1);
-
-	struct sigaction	sa1;
 	sa1 = (struct sigaction){0};
 	sa1.sa_handler = sighandler_kill;
 	sigaction (SIGINT, &sa1, NULL);
-	
 	initialize_sigaction();
 	while (*str)
 	{

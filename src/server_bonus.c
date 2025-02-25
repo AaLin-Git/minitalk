@@ -6,7 +6,7 @@
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:46 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/25 14:34:00 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:43:28 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	sighandler(int signum, siginfo_t *info, void *context)
 	kill(info->si_pid, SIGUSR1);
 }
 
-void sighandler_kill(int signum)
+void	sighandler_kill(int signum)
 {
 	(void)signum;
 	exit(0);
@@ -44,6 +44,7 @@ void sighandler_kill(int signum)
 int	main(void)
 {
 	struct sigaction	sa;
+	struct sigaction	sa1;
 
 	ft_printf("PID: %d\n", getpid());
 	sa = (struct sigaction){0};
@@ -51,12 +52,9 @@ int	main(void)
 	sa.sa_flags = SA_SIGINFO;
 	sigaction (SIGUSR1, &sa, NULL);
 	sigaction (SIGUSR2, &sa, NULL);
-
-	struct sigaction	sa1;
 	sa1 = (struct sigaction){0};
 	sa1.sa_handler = sighandler_kill;
 	sigaction (SIGINT, &sa1, NULL);
-	
 	while (1)
 		pause();
 	return (0);
