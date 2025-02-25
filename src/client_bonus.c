@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akovalch <akovalch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:41:29 by akovalch          #+#    #+#             */
-/*   Updated: 2025/02/25 12:17:08 by akovalch         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:16:04 by akovalch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ void	initialize_sigaction(void)
 	sigaction(SIGUSR2, &sa, NULL);
 }
 
+void sighandler_kill(int signum)
+{
+	(void)signum;
+	exit(0);
+}
+
 int	main(int argc, char *argv[])
 {
 	pid_t				pid;
@@ -64,6 +70,11 @@ int	main(int argc, char *argv[])
 	str = argv[2];
 	if (pid <= 0)
 		return (ft_printf(ERR_PID), 1);
+
+	struct sigaction	sa1;
+	sa1 = (struct sigaction){0};
+	sa1.sa_handler = sighandler_kill;
+	sigaction (SIGINT, &sa1, NULL);
 	
 	initialize_sigaction();
 	while (*str)
